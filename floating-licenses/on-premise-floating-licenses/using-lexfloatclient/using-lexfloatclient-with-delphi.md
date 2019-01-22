@@ -44,7 +44,7 @@ begin
     Step := 'SetHostUrl'; SetHostUrl('http://localhost:8090');
     Step := 'SetFloatingLicenseCallback';
     // console application has no message loop, thus Synchronized is False
-    SetFloatingLicenseCallback(OnLexFloatClient, False);
+    SetFloatingLicenseCallback(LicenseRenewCallback, False);
     try
       Step := 'RequestFloatingLicense'; RequestFloatingLicense;
       try
@@ -87,7 +87,7 @@ The second argument of `LexFloatClient.SetFloatingLicenseCallback` is False beca
 License lease automatically renews itself in a background thread. When something goes wrong, Callback is invoked \(from background thread\). Callback can be either procedure, object method, class method or a closure \(also known as anonymous function\). Note that GUI applications cannot safely interact with GUI elements from a thread other than GUI one. `System.Classes.TThread.Synchronize` will be used if `Synchronized` was `True` when callback was set. On another hand, `Synchronized` cannot work without message loop in main thread (e.g. in console applications), so synchronization must be performed in another way then.
 
 ```delphi
-procedure OnLexFloatClient(const Error: Exception);
+procedure LicenseRenewCallback(const Error: Exception);
 begin
   // No synchronization, write everything to console
   WriteLn;
